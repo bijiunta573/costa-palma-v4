@@ -1,0 +1,117 @@
+COSTA PALMA — make.fun gta6-01 "Make GTA 6" entry, STAGED (not submitted)
+=========================================================================
+
+Repo:        /home/hatch/workspace/makefun/gta6-01-v4
+Game commit: 4363d23022fe90bb7bfcbd25beaa8d483e036167
+             ("Costa Palma: original open-world crime game for gta6-01",
+              on top of the parent-provided empty init commit d294566.
+              This STAGED.txt is committed on top; the finisher submits
+              the final HEAD, whose tree is this file plus that commit.)
+Game:        "Costa Palma" — an original sun-soaked coastal city. Leo
+             Marchetti, a wheelman, runs three jobs for fixer Mama Rosa.
+             Nothing is taken from any commercial game: own city, names,
+             story, art (procedural), sounds (synthesized).
+
+Entrypoint:  main.ts is authored for this entry (stages game/ and
+             screenshots/ into the output dir, writes dossier.json via
+             buildDossier from vendor/makefun-game.ts with the gate's
+             caps). serve.ts, shots.json, LICENSE and
+             vendor/makefun-game.ts are the kit's, byte-identical.
+
+MODULES (game/src/, one job each; Three.js r160 vendored as the single
+game/vendor/three.module.min.js, listed as Vendored in the dossier)
+  main.js             boot, shared state (cash/heat/cars/danger), game loop, wiring
+  config.js           city grid, named places, economy and wanted tuning constants
+  util.js             seeded RNG, angle math, circle-vs-box collision, money format
+  input.js            keyboard/mouse state, pointer lock with drag-orbit fallback
+  city-layout.js      deterministic city plan: building plots, colliders, palms, parking
+  buildings.js        meshes: ground texture, towers, palms, lamps, beach, marina, boats
+  vehicles.js         car mesh factory and the shared car entity
+  vehicle-physics.js  arcade driving: throttle, steering, drift, all car collisions
+  traffic-ai.js       lane traffic that brakes for obstacles and panics at gunfire
+  pedestrian-ai.js    sidewalk citizens who flee screaming and stay down when hit
+  police-ai.js        cruisers that spawn on wanted level, chase, ram and pin
+  player-controller.js humanoid factory; Leo's on-foot movement and orbit camera
+  combat.js           fist and pistol (sphere/box ray math) and the rival gunmen AI
+  missions.js         Mama Rosa's 3-job stage machine, dialogue, timers, rewards
+  hud-minimap.js      HUD DOM, canvas minimap with blips, banners, menus, toasts
+  audio-synth.js      WebAudio-only sound: engine, sirens, shots, jingles, surf
+  effects.js          pooled particles (smoke/sparks/dust), muzzle flash, tracers, shake
+  save-game.js        localStorage save: cash, story progress, pistol
+  photo-mode.js       ?photo= staging for the four screenshots (frozen frames)
+
+FEATURE CHECKLIST (all live in gameplay, not just present as code)
+  [x] On foot: WASD + mouse-orbit camera (pointer lock, drag fallback), Shift sprint
+  [x] Cars: parked + traffic; E steals/enters (traffic owners bail out and flee),
+      driving with chase cam and HUD speedometer, Space handbrake, E exits
+  [x] Traffic AI: right-hand lanes on the grid, turns at crossings, brakes for
+      cars/player/pedestrians, panics and swerves at nearby gunfire
+  [x] Pedestrians: sidewalk strolling, flee with scream popups ("Aaa!", "Help!"),
+      knocked down by cars and fists, get up and run
+  [x] Wanted 0-5 stars: witnessed crimes add heat (steal/punch/hit-and-run/
+      gunfire/collisions), police spawn scaled to stars, chase/ram/pin,
+      hiding decays heat, BUSTED/WASTED -> hospital respawn minus a cash fine
+  [x] Combat: left-click punch; pistol after job 1 (RMB aim, crosshair,
+      muzzle flash + tracer, headshot crits), enemy gunmen who strafe and shoot
+  [x] Missions: M1 "First Wheels" (steal the marked convertible, timed delivery),
+      M2 "Hot Package" (marina pickup -> forced 3 stars -> lose police -> hideout),
+      M3 "Harbor Heat" (two gunmen waves at the marina -> escape car -> drop-off);
+      dialogue banners, world beacon + minimap objective blip, cash rewards
+  [x] HUD: round canvas minimap (roads, sea, police/traffic/gunman/objective
+      blips, player arrow), stars, cash, health bar, objective, timer, prompts, speed
+  [x] Start screen (story, controls, New Game/Continue), Esc pause, localStorage save
+  [x] Sound: synthesized engine by speed, two-tone sirens by distance, gunshots,
+      punch, crash, jingles, surf ambience; M mutes
+  [x] Effects: skid and damage smoke, impact sparks, muzzle flash light,
+      tracers, screen shake on crashes
+
+SCREENSHOTS (screenshots/, all real headless-Chromium renders of the game
+at 1280x720, JPG, staged via ?photo= and frozen on the staged frame)
+  1-cover.jpg   (93,354 B) ?photo=cover — Leo in the gold convertible mid-
+                delivery (M1, timer 1:36 on HUD), two cruisers boxing him in
+                with lit light bars, 3 wanted stars, minimap with police
+                blips and the garage objective on the rim.
+  2-foot.jpg    (78,132 B) ?photo=foot — Leo on foot on the boulevard
+                sidewalk, pedestrians around him, traffic on the avenue,
+                palms and towers, M1 steal objective on the HUD.
+  3-mission.jpg (68,883 B) ?photo=mission — M2 pickup staged on Marina
+                Pier 2: Leo before the gold objective beacon and package
+                crate, Mama Rosa's dialogue banner up, marina minimap.
+  4-combat.jpg  (64,851 B) ?photo=combat — M3 shootout: Leo aiming with
+                muzzle flash and a live tracer, two Verano gunmen returning
+                fire from the piers, a third down, health at 55%.
+
+VERIFICATION (all run in this session)
+  - Dossier build: MAKEFUN_OUTPUT_DIR=/tmp/gta6v4-out node main.ts ->
+    "game/ 23 entries, 794250 bytes; dossier.json 536185 bytes".
+    Dossier Game block: Source files 20 (123,569 bytes), Vendored 1
+    (three.module.min.js, 670,681 bytes), Totals 23 entries / 794,250 B.
+    Dossier text 124,999 B < 163,840 cap; game/ 23 < 993 entries and
+    < 48 MiB; index.html 7,938 B < 1 MiB. Second run byte-identical
+    (sha256 c9596726...), trees diff-clean: deterministic.
+  - Rendering: all four ?photo= scenes load in headless Chromium with
+    ZERO console errors and were visually inspected (real 3D frames,
+    full HUD, nothing blank). Screenshots exactly 1280x720, each
+    <= 256 KiB.
+  - Live play test (CDP-driven, real key events): menu -> NEW GAME ->
+    walk -> E steals the convertible (inCar true) -> objective advances
+    to the delivery stage -> witnessed steal raises 1 star -> driving
+    registers speed on the HUD (21 km/h) -> E exits at a standstill.
+    Zero page errors across every run.
+  - References: grep of game/src and game/index.html finds no http://
+    or https:// strings; every import resolves inside game/ (import map
+    -> vendor/three.module.min.js). All 19 own modules parse as ES
+    modules (node vm.SourceTextModule).
+
+KNOWN WEAKNESSES
+  - Frame time is clamped at 50 ms, so machines under ~20 fps run the
+    game in slow motion instead of dropping steps (visible in headless
+    SwiftShader; fine on real hardware).
+  - Car collision is a single circle per car: long vehicles can clip a
+    building corner at glancing angles; police steering can nose into a
+    wall briefly before the next frame's push-out frees it.
+  - Pedestrians keep to sidewalk lines and the marina apron edge; they
+    do not use crosswalks as such, and gunmen fight in the open without
+    taking cover.
+  - The sea is one scrolling texture with no waves or reflections, and
+    boat hulls are simple boxes; the marina reads as dressing, not a sim.
