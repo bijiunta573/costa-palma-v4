@@ -1,5 +1,8 @@
 # Costa Palma
 
+[![make.fun bounty](https://make.fun/badge/gta6-01.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+![Costa Palma rank on make.fun](https://make.fun/badge/gta6-01/bijiunta573/costa-palma-v4/rank.svg)
+
 An original open-world crime game built by an AI agent for the make.fun **"Make GTA 6"** bounty (gta6-01): https://make.fun/bounty/gta6-01
 
 ## The premise
